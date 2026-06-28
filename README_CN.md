@@ -4,7 +4,12 @@
 
 在布里斯班家庭设备（Mac Mini 或 Apple TV）上运行的 VLESS+Reality 代理——利用住宅 IP 实现终极抗 GFW 方案。
 
-> **状态：** 参考架构，暂未实际部署——现有方案（Linode 东京的 VLESS-Reality + 阿里云深圳→新加坡中转）已能满足当前需求。本文档作为 VPS 代理不可靠时的未来备选方案存档。
+> **状态：** 参考架构，暂未实际部署——且几乎不太可能用到。三个原因：
+> 1. **延迟高：** 中国→布里斯班约 150–200ms，而中国→东京（Linode）仅约 50–80ms，日常浏览和视频通话体验明显较差。
+> 2. **冗余已足够：** VLESS-Reality（Linode 东京）+ Alan-Infrastructure（深圳→新加坡）+ ss-server-config 已覆盖不同服务商、地区和协议，三者同时失效的概率对单一低流量个人用户而言几乎为零。
+> 3. **从未需要动用的核武器：** 只有在所有 VPS 代理同时被封的情况下才有意义——在这种规模下根本不现实。
+>
+> 本文档仅作为住宅 IP 代理概念的参考存档。
 
 **相关项目：**
 - [VLESS-Reality](https://github.com/zzpy20/VLESS-Reality) — Linode 东京的 VLESS+Reality（主要代理）

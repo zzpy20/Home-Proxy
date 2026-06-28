@@ -4,7 +4,12 @@
 
 VLESS+Reality proxy running on a Brisbane home machine (Mac Mini or Apple TV) — the ultimate GFW-resistant setup using a residential IP.
 
-> **Status:** Reference architecture. Not actively deployed — existing solutions (VLESS-Reality on Linode, Alan-Infrastructure SZ→SG relay) are sufficient for current needs. This is documented as a future fallback if VPS-based proxies become unreliable.
+> **Status:** Reference architecture. Not actively deployed — and unlikely to ever be needed. Three reasons:
+> 1. **Latency:** China→Brisbane is ~150–200ms vs ~50–80ms for China→Tokyo (Linode). Noticeably sluggish for daily browsing and video calls.
+> 2. **Redundancy already covered:** VLESS-Reality (Linode Tokyo) + Alan-Infrastructure (SZ→SG) + ss-server-config span different providers, regions, and protocols. The probability of all three failing simultaneously for a single low-traffic personal user is essentially zero.
+> 3. **Nuclear option that's never needed:** This would only matter if all VPS-based proxies got simultaneously blocked — an unrealistic scenario at this scale.
+>
+> Documented here purely as a reference for the residential IP concept.
 
 **Related projects:**
 - [VLESS-Reality](https://github.com/zzpy20/VLESS-Reality) — VLESS+Reality on Linode Tokyo (primary proxy)
