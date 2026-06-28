@@ -51,7 +51,7 @@ Device (China) ──VLESS+Reality──▶ yourhome.duckdns.org (Brisbane NBN) 
 | Uptime | Datacenter-grade | Depends on home power + NBN |
 | Bandwidth | 1Gbps+ VPS | NBN upload (20–50 Mbps typical) |
 | Cost | ~$5–10/month | Electricity only |
-| Recovery if blocked | New VPS + replace.sh (~10 min) | ISP rotates IP naturally |
+| Recovery if blocked | New VPS + replace.sh (~10 min) | Reboot home modem → new IP, DuckDNS updates in 5 min |
 
 ---
 
@@ -125,7 +125,7 @@ Same as VLESS-Reality — just replace the server hostname:
 
 - **Upload speed is the bottleneck** — NBN upload (20–50 Mbps) is your proxy bandwidth. Fine for one person, tight for 4K streaming.
 - **No datacenter uptime** — if home power or NBN goes down, so does the proxy. Unlike a VPS, there's no redundancy.
-- **Home IP can still be individually blocked** — unlikely for a single low-traffic connection, and your ISP naturally rotates it anyway.
+- **Home IP can still be individually blocked** — unlikely for a single low-traffic connection. If it happens, GFW blocks only traffic from China to that specific IP; your ISP has no visibility into this and your Brisbane neighbours are completely unaffected. Recovery: reboot your home modem remotely (ask family, or use a smart plug) — your ISP issues a new IP, DuckDNS picks it up within 5 minutes, and Shadowrocket needs no changes.
 - **Port 443 conflicts** — if anything else on your Mac Mini uses port 443, you'll need to remap.
 
 ---
