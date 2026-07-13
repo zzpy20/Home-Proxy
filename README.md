@@ -5,21 +5,21 @@
 VLESS+Reality proxy running on a Brisbane home machine (Mac Mini or Apple TV) — the ultimate GFW-resistant setup using a residential IP.
 
 > **Status:** Reference architecture. Not actively deployed — and unlikely to ever be needed. Three reasons:
-> 1. **Latency:** China→Brisbane is ~150–200ms vs ~50–80ms for China→Tokyo (Linode). Noticeably sluggish for daily browsing and video calls.
-> 2. **Redundancy already covered:** VLESS-Reality (Linode Tokyo) + Alan-Infrastructure (SZ→SG) + ss-server-config span different providers, regions, and protocols. The probability of all three failing simultaneously for a single low-traffic personal user is essentially zero.
+> 1. **Latency:** China→Brisbane is ~150–200ms vs ~50–80ms for China→Tokyo (AWS). Noticeably sluggish for daily browsing and video calls.
+> 2. **Redundancy already covered:** VLESS-Reality (AWS Tokyo) + Alan-Infrastructure (SZ→SG) + ss-server-config span different providers, regions, and protocols. The probability of all three failing simultaneously for a single low-traffic personal user is essentially zero.
 > 3. **Nuclear option that's never needed:** This would only matter if all VPS-based proxies got simultaneously blocked — an unrealistic scenario at this scale.
 >
 > Documented here purely as a reference for the residential IP concept.
 
 **Related projects:**
-- [VLESS-Reality](https://github.com/zzpy20/VLESS-Reality) — VLESS+Reality on Linode Tokyo (primary proxy)
+- [VLESS-Reality](https://github.com/zzpy20/VLESS-Reality) — VLESS+Reality on AWS Lightsail Tokyo (primary proxy)
 - [Alan-Infrastructure](https://github.com/zzpy20/Alan-Infrastructure) — Shadowsocks SZ→SG relay (fallback)
 
 ---
 
 ## Why Residential IP?
 
-VPS-based proxies (Linode, Alibaba Cloud) rent IPs from known commercial datacenters. GFW can cross-reference any IP against published ASN ranges and identify it as a datacenter — regardless of what protocol is running on it.
+VPS-based proxies (AWS, Alibaba Cloud) rent IPs from known commercial datacenters. GFW can cross-reference any IP against published ASN ranges and identify it as a datacenter — regardless of what protocol is running on it.
 
 A Brisbane home IP is assigned by a residential ISP (e.g. Aussie Broadband, TPG). It is:
 - **Indistinguishable from normal household traffic** — GFW sees an Australian home connection, not a proxy server
@@ -48,10 +48,10 @@ Device (China) ──VLESS+Reality──▶ yourhome.duckdns.org (Brisbane NBN) 
 
 ## Why This Is More Reliable
 
-| | VLESS-Reality (Linode) | Home-Proxy (Brisbane) |
+| | VLESS-Reality (AWS) | Home-Proxy (Brisbane) |
 |---|---|---|
-| IP type | Commercial datacenter (Linode ASN) | Residential ISP |
-| ASN mismatch risk | Yes — Linode is not Apple infrastructure | None — looks like a real home |
+| IP type | Commercial datacenter (AWS ASN) | Residential ISP |
+| ASN mismatch risk | None currently — server SNI (`www.amazon.com`) shares the same ASN as the AWS Tokyo IP (see VLESS-Reality's README for the 2026-07-05 switch away from `itunes.apple.com`, which *did* mismatch) | None — looks like a real home |
 | GFW blocking risk | IP-level blocking possible | Near zero — can't bulk-block residential ISPs |
 | Uptime | Datacenter-grade | Depends on home power + NBN |
 | Bandwidth | 1Gbps+ VPS | NBN upload (20–50 Mbps typical) |
@@ -137,8 +137,8 @@ Same as VLESS-Reality — just replace the server hostname:
 
 ## Priority Order (When in China)
 
-1. **VLESS-Reality** (Linode Tokyo) — primary, fast, low latency to Japan
-2. **Alan-Infrastructure** (SZ→SG relay) — fallback if Linode IP gets blocked
+1. **VLESS-Reality** (AWS Tokyo) — primary, fast, low latency to Japan
+2. **Alan-Infrastructure** (SZ→SG relay) — fallback if the AWS IP gets blocked
 3. **Home-Proxy** (Brisbane) — most GFW-resistant, but higher latency (China→Australia) and dependent on home uptime
 4. **ss-server-config** — last resort
 

@@ -5,21 +5,21 @@
 在布里斯班家庭设备（Mac Mini 或 Apple TV）上运行的 VLESS+Reality 代理——利用住宅 IP 实现终极抗 GFW 方案。
 
 > **状态：** 参考架构，暂未实际部署——且几乎不太可能用到。三个原因：
-> 1. **延迟高：** 中国→布里斯班约 150–200ms，而中国→东京（Linode）仅约 50–80ms，日常浏览和视频通话体验明显较差。
-> 2. **冗余已足够：** VLESS-Reality（Linode 东京）+ Alan-Infrastructure（深圳→新加坡）+ ss-server-config 已覆盖不同服务商、地区和协议，三者同时失效的概率对单一低流量个人用户而言几乎为零。
+> 1. **延迟高：** 中国→布里斯班约 150–200ms，而中国→东京（AWS）仅约 50–80ms，日常浏览和视频通话体验明显较差。
+> 2. **冗余已足够：** VLESS-Reality（AWS 东京）+ Alan-Infrastructure（深圳→新加坡）+ ss-server-config 已覆盖不同服务商、地区和协议，三者同时失效的概率对单一低流量个人用户而言几乎为零。
 > 3. **从未需要动用的核武器：** 只有在所有 VPS 代理同时被封的情况下才有意义——在这种规模下根本不现实。
 >
 > 本文档仅作为住宅 IP 代理概念的参考存档。
 
 **相关项目：**
-- [VLESS-Reality](https://github.com/zzpy20/VLESS-Reality) — Linode 东京的 VLESS+Reality（主要代理）
+- [VLESS-Reality](https://github.com/zzpy20/VLESS-Reality) — AWS Lightsail 东京的 VLESS+Reality（主要代理）
 - [Alan-Infrastructure](https://github.com/zzpy20/Alan-Infrastructure) — Shadowsocks 深圳→新加坡中转（备用）
 
 ---
 
 ## 为什么住宅 IP 更优？
 
-基于 VPS 的代理（Linode、阿里云）使用的是已知商业数据中心的 IP。GFW 可以将任意 IP 与公开的 ASN 地址段交叉比对，无论运行什么协议，都能识别出数据中心来源。
+基于 VPS 的代理（AWS、阿里云）使用的是已知商业数据中心的 IP。GFW 可以将任意 IP 与公开的 ASN 地址段交叉比对，无论运行什么协议，都能识别出数据中心来源。
 
 布里斯班家庭 IP 由住宅 ISP（如 Aussie Broadband、TPG）分配，具备以下特点：
 - **与普通家庭流量无法区分** — GFW 看到的是一个澳大利亚家庭连接，而非代理服务器
@@ -48,10 +48,10 @@
 
 ## 为什么更可靠
 
-| | VLESS-Reality（Linode） | Home-Proxy（布里斯班） |
+| | VLESS-Reality（AWS） | Home-Proxy（布里斯班） |
 |---|---|---|
-| IP 类型 | 商业数据中心（Linode ASN） | 住宅 ISP |
-| ASN 不匹配风险 | 有——Linode 不是 Apple 基础设施 | 无——看起来就是真实家庭网络 |
+| IP 类型 | 商业数据中心（AWS ASN） | 住宅 ISP |
+| ASN 不匹配风险 | 目前无——服务器的 SNI（`www.amazon.com`）和 AWS 东京 IP 的 ASN 一致（VLESS-Reality 的 README 里记录了 2026-07-05 从 `itunes.apple.com` 切换过来的原因——旧选择当时确实存在 ASN 不匹配） | 无——看起来就是真实家庭网络 |
 | GFW 封锁风险 | IP 层封锁可能发生 | 几乎为零——无法批量封锁住宅 ISP |
 | 稳定性 | 数据中心级别 | 取决于家庭电力和 NBN |
 | 带宽 | 1Gbps+ VPS | NBN 上行（典型 20–50 Mbps） |
@@ -137,8 +137,8 @@ bash deploy.sh              # 启动 sing-box 容器
 
 ## 在中国时的优先顺序
 
-1. **VLESS-Reality**（Linode 东京）— 首选，速度快，中日延迟低
-2. **Alan-Infrastructure**（深圳→新加坡中转）— Linode IP 被封时的备用
+1. **VLESS-Reality**（AWS 东京）— 首选，速度快，中日延迟低
+2. **Alan-Infrastructure**（深圳→新加坡中转）— AWS IP 被封时的备用
 3. **Home-Proxy**（布里斯班）— 抗 GFW 能力最强，但中澳延迟较高，且依赖家庭网络稳定性
 4. **ss-server-config** — 最后手段
 
